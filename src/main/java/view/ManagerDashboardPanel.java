@@ -4,10 +4,12 @@ import controller.UserController;
 import model.User;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.util.List;
 
+/**
+ * Панель менеджера с уникальными функциями: управление пользователями, лимиты.
+ */
 public class ManagerDashboardPanel extends JPanel {
     private final AppFrame appFrame;
     private final UserController userController;
@@ -19,7 +21,8 @@ public class ManagerDashboardPanel extends JPanel {
         setLayout(null);
 
         JLabel titleLabel = new JLabel("Manager Dashboard");
-        titleLabel.setBounds(250, 20, 200, 30);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setBounds(250, 20, 300, 30);
         add(titleLabel);
 
         // Добавление пользователя
@@ -51,7 +54,7 @@ public class ManagerDashboardPanel extends JPanel {
             }
         });
 
-        // Просмотр всех пользователей
+        // Просмотр пользователей
         JButton viewUsersButton = new JButton("View All Users");
         viewUsersButton.setBounds(50, 170, 200, 30);
         add(viewUsersButton);
@@ -68,7 +71,7 @@ public class ManagerDashboardPanel extends JPanel {
             JOptionPane.showMessageDialog(this, userList.toString());
         });
 
-        // Установка лимитов
+        // Установка финансовых лимитов
         JButton setLimitsButton = new JButton("Set Financial Limits");
         setLimitsButton.setBounds(50, 220, 200, 30);
         add(setLimitsButton);
@@ -80,7 +83,7 @@ public class ManagerDashboardPanel extends JPanel {
             }
         });
 
-        // Переход к отчётам
+        // Просмотр отчётов
         JButton reportsButton = new JButton("View Reports");
         reportsButton.setBounds(50, 270, 200, 30);
         add(reportsButton);

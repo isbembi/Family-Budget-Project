@@ -3,11 +3,12 @@ package view;
 import javax.swing.*;
 
 public class PersonalDashboardPanel extends JPanel {
+    private final AppFrame appFrame;
+
     public PersonalDashboardPanel(AppFrame appFrame) {
+        this.appFrame = appFrame;
         setLayout(null);
-        JLabel label = new JLabel("Welcome to Personal Dashboard!");
-        label.setBounds(50, 50, 300, 30);
-        add(label);
+
 
         JButton chatButton = new JButton("Go to Chat");
         chatButton.setBounds(50, 100, 150, 30);
@@ -20,5 +21,11 @@ public class PersonalDashboardPanel extends JPanel {
         add(reportsButton);
 
         reportsButton.addActionListener(e -> appFrame.switchTo("ReportsPanel"));
+
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.setBounds(50, 200, 150, 30);
+        add(logoutButton);
+
+        logoutButton.addActionListener(e -> appFrame.switchTo("Login"));
     }
 }

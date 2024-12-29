@@ -9,7 +9,18 @@ import java.awt.*;
  */
 public class AppFrame extends JFrame {
     private CardLayout cardLayout; // Макет для переключения панелей
-    private JPanel mainPanel;      // Основная панель с CardLayout
+    private JPanel mainPanel;
+    private int currentUserId;
+
+    public void setCurrentUserId(int userId) {
+        this.currentUserId = userId;
+    }
+
+    public int getCurrentUserId() {
+        return currentUserId;
+    }
+
+// Основная панель с CardLayout
 
     public AppFrame() {
         // Настройка основного окна
@@ -22,13 +33,13 @@ public class AppFrame extends JFrame {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
-        // Добавляем панели в CardLayout
+        // Добавляем панели
         mainPanel.add(new LoginFramePanel(this), "Login");
         mainPanel.add(new PersonalDashboardPanel(this), "PersonalDashboard");
         mainPanel.add(new FamilyDashboardPanel(this), "FamilyDashboard");
         mainPanel.add(new ManagerDashboardPanel(this), "ManagerDashboard");
-        mainPanel.add(new ChatPanelPanel(this), "ChatPanel");
-        mainPanel.add(new ReportsPanel(), "ReportsPanel");
+        mainPanel.add(new ChatPanelPanel(this, currentUserId), "ChatPanel");
+        mainPanel.add(new ReportsPanelPanel(this), "ReportsPanel");
 
         // Добавляем главную панель в окно
         add(mainPanel);

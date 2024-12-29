@@ -14,5 +14,7 @@ public class FamilyDashboardPanel extends JPanel {
         add(chatButton);
 
         chatButton.addActionListener(e -> appFrame.switchTo("ChatPanel"));
+
     }
+
 }
