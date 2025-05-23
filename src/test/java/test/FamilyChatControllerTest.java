@@ -19,9 +19,13 @@ public class FamilyChatControllerTest {
     @Test
     @DisplayName("Отправка сообщения в чат")
     void testSendMessage() {
-        FamilyChat message = new FamilyChat(0, 1, "Test Message", new Date());
-        chatController.sendMessage(message);
-        List<FamilyChat> messages = chatController.getAllMessages();
-        Assertions.assertTrue(messages.stream().anyMatch(m -> m.getMessage().equals("Test Message")));
+        chatController.sendMessage("Hello, Chat!");
+        List<FamilyChat> messages = chatController.getAllMessagesWithUserNames();
+        Assertions.assertTrue(
+                messages.stream().anyMatch(
+                        m -> m.getMessage().equals("Hello, Chat!") && m.getUserName().equals("TestUser")
+                ),
+                "Сообщение должно отображаться с корректным именем пользователя"
+        );
     }
 }

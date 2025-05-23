@@ -5,7 +5,6 @@ import model.FamilyChat;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,11 +15,11 @@ public class ChatPanelPanel extends JPanel {
     private final FamilyChatController chatController;
     private JTextArea chatArea;
     private JTextField messageField;
-    private final int userId;
 
-    public ChatPanelPanel(AppFrame appFrame, int userId) {
+
+
+    public ChatPanelPanel(AppFrame appFrame) {
         this.appFrame = appFrame;
-        this.userId = userId; // Получаем ID пользователя из AppFrame
         this.chatController = new FamilyChatController();
 
         setLayout(new BorderLayout());
@@ -33,28 +32,36 @@ public class ChatPanelPanel extends JPanel {
         JPanel bottomPanel = new JPanel(new BorderLayout());
         messageField = new JTextField();
         JButton sendButton = new JButton("Send");
+        JButton backButton = new JButton("Back");
 
         bottomPanel.add(messageField, BorderLayout.CENTER);
         bottomPanel.add(sendButton, BorderLayout.EAST);
+        bottomPanel.add(backButton, BorderLayout.WEST);
         add(bottomPanel, BorderLayout.SOUTH);
 
+
+
         sendButton.addActionListener(e -> {
-            String message = messageField.getText();
+            String message = messageField.getText().trim();
             if (!message.isEmpty()) {
-                chatController.sendMessage(new FamilyChat(0, userId, message, new Date()));
+                chatController.sendMessage( message);
                 messageField.setText("");
                 loadChatMessages();
+            } else {
+                JOptionPane.showMessageDialog(this, "Message cannot be empty!", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         });
+
+        backButton.addActionListener(e -> appFrame.switchTo("PersonalDashboard"));
 
         loadChatMessages();
     }
 
     private void loadChatMessages() {
         chatArea.setText("");
-        List<FamilyChat> messages = chatController.getAllMessages();
+        List<FamilyChat> messages = chatController.getAllMessagesWithUserNames();
         for (FamilyChat msg : messages) {
-            chatArea.append("User " + msg.getUserId() + ": " + msg.getMessage() + "\n");
+            chatArea.append(msg.getUserName() + ": " + msg.getMessage() + "\n");
         }
     }
 }

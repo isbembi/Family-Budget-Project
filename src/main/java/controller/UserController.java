@@ -7,13 +7,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Контроллер для управления пользователями (CRUD операции).
- */
 public class UserController {
-    /**
-     * ✅ Аутентификация пользователя.
-     */
+
     public boolean authenticateUser(String email, String password) {
         try (Connection conn = DatabaseConnector.getConnection()) {
             String query = "SELECT * FROM user WHERE email = ? AND password = ?";
@@ -21,16 +16,13 @@ public class UserController {
             stmt.setString(1, email);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
-            return rs.next(); // Если есть запись, возвращаем true
+            return rs.next();
         } catch (SQLException e) {
             System.err.println("❌ Ошибка аутентификации: " + e.getMessage());
         }
         return false;
     }
 
-    /**
-     * ✅ Получение ID пользователя по email.
-     */
     public int getUserIdByEmail(String email) {
         try (Connection conn = DatabaseConnector.getConnection()) {
             String query = "SELECT id FROM user WHERE email = ?";
@@ -43,12 +35,25 @@ public class UserController {
         } catch (SQLException e) {
             System.err.println("❌ Ошибка при получении ID пользователя: " + e.getMessage());
         }
-        return -1; // Возвращаем -1, если пользователь не найден
+        return -1;
     }
 
-    /**
-     * ✅ Добавление нового пользователя.
-     */
+    public static String getUserNameById(int userId) {
+        String userName = "";
+        try (Connection conn = DatabaseConnector.getConnection()) {
+            String query = "SELECT name FROM user WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                userName = rs.getString("name");
+            }
+        } catch (SQLException e) {
+            System.err.println("❌ Ошибка получения имени пользователя: " + e.getMessage());
+        }
+        return userName;
+    }
+
     public void addUser(User user) {
         try (Connection conn = DatabaseConnector.getConnection()) {
             String query = "INSERT INTO user (name, email, password, user_type, salary) VALUES (?, ?, ?, ?, ?)";
@@ -65,9 +70,6 @@ public class UserController {
         }
     }
 
-    /**
-     * ✅ Получение всех пользователей.
-     */
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         try (Connection conn = DatabaseConnector.getConnection()) {
@@ -90,9 +92,6 @@ public class UserController {
         return users;
     }
 
-    /**
-     * ✅ Получение пользователя по ID.
-     */
     public User getUserById(int userId) {
         try (Connection conn = DatabaseConnector.getConnection()) {
             String query = "SELECT * FROM user WHERE id = ?";
@@ -112,12 +111,9 @@ public class UserController {
         } catch (SQLException e) {
             System.err.println("❌ Ошибка получения пользователя по ID: " + e.getMessage());
         }
-        return null; // Возвращаем null, если пользователь не найден
+        return null;
     }
 
-    /**
-     * ✅ Обновление данных пользователя.
-     */
     public void updateUser(User user) {
         try (Connection conn = DatabaseConnector.getConnection()) {
             String query = "UPDATE user SET name = ?, email = ?, password = ?, user_type = ?, salary = ? WHERE id = ?";
@@ -135,9 +131,6 @@ public class UserController {
         }
     }
 
-    /**
-     * ✅ Удаление пользователя.
-     */
     public void deleteUser(int userId) {
         try (Connection conn = DatabaseConnector.getConnection()) {
             String query = "DELETE FROM user WHERE id = ?";
@@ -150,9 +143,6 @@ public class UserController {
         }
     }
 
-    /**
-     * ✅ Проверка, является ли пользователь менеджером.
-     */
     public boolean isUserManager(int userId) {
         try (Connection conn = DatabaseConnector.getConnection()) {
             String query = "SELECT user_type FROM user WHERE id = ?";

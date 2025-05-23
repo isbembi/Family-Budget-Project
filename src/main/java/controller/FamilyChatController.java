@@ -5,37 +5,31 @@ import model.DatabaseConnector;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class FamilyChatController {
-
-    public void sendMessage(FamilyChat chat) {
+    public void sendMessage(String message) {
         try (Connection conn = DatabaseConnector.getConnection()) {
-            String query = "INSERT INTO family_chat (user_id, message, created_at) VALUES (?, ?, ?)";
+            String query = "INSERT INTO family_chat VALUES (message)  VALUES (?)";
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setInt(1, chat.getUserId());
-            stmt.setString(2, chat.getMessage());
-            stmt.setTimestamp(3, new Timestamp(new Date().getTime()));
+            stmt.setString(1, message);
             stmt.executeUpdate();
-            System.out.println("✅ Сообщение отправлено.");
+            System.out.println("✅ Сообщение успешно отправлено.");
         } catch (SQLException e) {
             System.err.println("❌ Ошибка отправки сообщения: " + e.getMessage());
         }
     }
 
-    public List<FamilyChat> getAllMessages() {
+    public List<FamilyChat> getAllMessagesWithUserNames() {
         List<FamilyChat> messages = new ArrayList<>();
         try (Connection conn = DatabaseConnector.getConnection()) {
-            String query = "SELECT * FROM family_chat ORDER BY created_at DESC";
+            String query = "SELECT message, created_at FROM family_chat ORDER BY created_at DESC";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 messages.add(new FamilyChat(
-                        rs.getInt("id"),
-                        rs.getInt("user_id"),
                         rs.getString("message"),
-                        rs.getTimestamp("created_at")
+                        rs.getDate("created_at")
                 ));
             }
         } catch (SQLException e) {

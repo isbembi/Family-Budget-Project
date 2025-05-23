@@ -5,17 +5,14 @@ import utils.NotificationUtils;
 
 import javax.swing.*;
 
-/**
- * Панель для входа в систему.
- */
 public class LoginFramePanel extends JPanel {
     private final AppFrame appFrame;
     private final UserController userController;
 
+
     public LoginFramePanel(AppFrame appFrame) {
         this.appFrame = appFrame;
-        this.userController = new UserController(); // Создаем один раз
-
+        this.userController = new UserController();
         setLayout(null);
 
         // Email Label и TextField
@@ -60,23 +57,15 @@ public class LoginFramePanel extends JPanel {
                         return;
                     }
 
-                    appFrame.setCurrentUserId(userId);
                     boolean isManager = userController.isUserManager(userId);
 
+
                     if (isManager) {
-                        NotificationUtils.showInfoMessage("Login Successful", "Welcome, Manager!");
-                        if (appFrame != null) {
-                            appFrame.switchTo("ManagerDashboard");
-                        } else {
-                            System.err.println("❌ AppFrame is null!");
-                        }
+                        NotificationUtils.showInfoMessage("Login Successful", "Welcome, Manager !");
+                        appFrame.switchTo("ManagerDashboard");
                     } else {
                         NotificationUtils.showInfoMessage("Login Successful", "Welcome, User!");
-                        if (appFrame != null) {
-                            appFrame.switchTo("PersonalDashboard");
-                        } else {
-                            System.err.println("❌ AppFrame is null!");
-                        }
+                        appFrame.switchTo("PersonalDashboard");
                     }
                 } else {
                     NotificationUtils.showErrorMessage("Login Failed", "Invalid email or password.");
@@ -86,5 +75,7 @@ public class LoginFramePanel extends JPanel {
                 ex.printStackTrace();
             }
         });
+
+
     }
 }
